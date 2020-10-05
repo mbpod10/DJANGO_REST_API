@@ -189,8 +189,10 @@ from .models import Article
 class ArticleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Article
-        fields = ['id', 'title', 'author']
+        fields = ['id', 'title', 'author', 'email', 'date']
 ```
+
+<b> THESE ARE THE FIELDS THAT WILL BE SHOWN AS THE API</b>
 
 PYTHON SHELL
 
@@ -221,11 +223,8 @@ from .serializers import ArticleSerializer
 
 
 def article_list(request):
-            #If request method is get
     if request.method == 'GET':
-            # articles = all Articles (SQL)
         articles = Article.objects.all()
-
         serializer = ArticleSerializer(articles, many=True)
         return JsonResponse(serializer.data, safe=False)
 
@@ -240,9 +239,11 @@ def article_list(request):
 
 ```
 
+- Notice the serializers are imported to the file
+
 # Urls
 
-Include api_baiscs.urls in django_api_projects urls
+Include `api_baiscs.urls` in `django_api_projects` urls
 
 ```python
 from django.contrib import admin
@@ -255,7 +256,7 @@ urlpatterns = [
 
 ```
 
-create a new file called `urls.py` in api_basic and render the function that was created in views
+create a new file called `urls.py` in `api_basic` and render the function that was created in `views.py`
 
 ```python
 from django.urls import path, include
@@ -274,12 +275,69 @@ Go to http://127.0.0.1:8000/article/
   {
     "id": 1,
     "title": "Article Title",
-    "author": "Bar"
+    "author": "Bar",
+    "email": "par@gmail.com",
+    "date": "2020-10-05T19:21:45.766033Z"
   },
   {
     "id": 2,
     "title": "Second Title 2",
-    "author": "Howdy"
+    "author": "Howdy",
+    "email": "second2@gmail.com",
+    "date": "2020-10-05T19:25:18.055948Z"
   }
 ]
 ```
+
+## Postman
+
+run a `GET` request from `http://localhost:8000/article`
+
+<b>OUTPUT</b>
+
+```json
+[
+  {
+    "id": 1,
+    "title": "Article Title",
+    "author": "Bar",
+    "email": "par@gmail.com",
+    "date": "2020-10-05T19:21:45.766033Z"
+  },
+  {
+    "id": 2,
+    "title": "Second Title 2",
+    "author": "Howdy",
+    "email": "second2@gmail.com",
+    "date": "2020-10-05T19:25:18.055948Z"
+  }
+]
+```
+
+Nice, now lets run a post request via PostMan
+
+1. open postman to `POST`
+2. make sure the url post is `http://localhost:8000/article/`
+3. click `Body`
+4. click `Raw`
+5. on the right, Select `JSON` from the dropdown
+6. insert the following:
+
+```json
+{
+  "id": 3,
+  "title": "Article Title3",
+  "author": "Three",
+  "email": "three@gmail.com"
+}
+```
+
+## Error
+
+Internal Error, we need to fix the csrf
+
+## Solved
+
+`api_basics/views.py` import `from django.views.decorators.csrf import csrf_exempt` and add the instance `@csrf_exempt` above the `article_list` function
+
+<b>NEW POST SUCCESSFUL</b>
