@@ -14,6 +14,8 @@ def article_list(request):
     if request.method == 'GET':
         articles = Article.objects.all()
         serializer = ArticleSerializer(articles, many=True)
+        print(serializer.data)
+
         return JsonResponse(serializer.data, safe=False)
 
     elif request.method == "POST":
@@ -36,6 +38,7 @@ def article_detail(request, pk):
 
     if request.method == 'GET':
         serializer = ArticleSerializer(article)
+        print(serializer.data['id'])  # SHOWS id
         return JsonResponse(serializer.data, status=201)
 
     elif request.method == 'PUT':
@@ -50,3 +53,15 @@ def article_detail(request, pk):
     elif request.method == 'DELETE':
         article.delete()
         return HttpResponse(status=204)
+
+
+def by_title(request, title):
+    try:
+        article = Article.objects.get(title=title)
+
+    except Article.DoesNotExist:
+        return HttpResponse("Does not exist", status=404)
+
+    if request.method == 'GET':
+        serializer = ArticleSerializer(article)
+        return JsonResponse(serializer.data, status=201)

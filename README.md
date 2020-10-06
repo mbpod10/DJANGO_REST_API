@@ -398,7 +398,7 @@ urlpatterns = [
 
 ```
 
-our new url endpoint will end in an id corresponding to the id of article needed `<int:pk>` refers to the id. <br />
+our new url endpoint will end with `detail/` and in an id corresponding to the id of article needed `<int:pk>` refers to the id. <br />
 
 Now, within `api_basic/urls` under the previously written method, add the following code. It is very similar to the previous method
 
@@ -428,4 +428,49 @@ def article_detail(request, pk):
         article.delete()
         return HttpResponse(status=204)
 
+```
+
+Let's see if it works: <br  />
+go to http://127.0.0.1:8000/detail/3/ and make sure we get a single article that corresponds to the id of 3
+
+```json
+{
+  "id": 3,
+  "title": "Article Title3",
+  "author": "Three",
+  "email": "three@gmail.com",
+  "date": "2020-10-05T21:26:52.404102Z"
+}
+```
+
+Go to POSTMAN and try `PUT` and `DELETE` routes
+
+## Custom URL
+
+Let's make a get request that retrieves an article based on `title` and call it `by_title`
+
+```python
+def by_title(request, title):
+    try:
+        article = Article.objects.get(title=title)
+
+    except Article.DoesNotExist:
+        return HttpResponse("Does not exist", status=404)
+
+    if request.method == 'GET':
+        serializer = ArticleSerializer(article)
+        return JsonResponse(serializer.data, status=201)
+
+```
+
+Now, change the URL endpoints to call the endpoint in localhost
+
+```python
+from django.urls import path, include
+from .views import article_list, article_detail, by_title
+urlpatterns = [
+    path('article/', article_list),
+    path('detail/<int:pk>/', article_detail),
+    path('title/<str:title>/', by_title)
+]
 ```
