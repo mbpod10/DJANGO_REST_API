@@ -550,7 +550,7 @@ Let's go back to `views.py` and make a query use SQL and make a change to the `G
 - You can now view and post from this new view
   - In Postman, the `GET` route still comes in as regular JSON
 
-# Authentication
+# Basic Authentication
 
 https://www.django-rest-framework.org/api-guide/authentication/
 
@@ -578,5 +578,31 @@ permission_classes = [IsAuthenticated]
 - In the `Type` dropdown, select `Basic Auth`
 - Enter your unique `Username` and `Password`
 - Click `Send`
+  - You now have access to the data
 
 Authentication Successful!
+
+## Token Authentication
+
+- In `settings.py` import `rest_framework.authtoken`
+
+```python
+
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'api_basic',
+]
+```
+
+- This installed app needs to be migrated
+  - `python3 manage.py migrate`
+- Go to http://127.0.0.1:8000/admin/ and insert superuser information
+- New Model called `Token` should now be installed
+  ["Tokens"](https://imgur.com/xSOcY6K "Tokens")
