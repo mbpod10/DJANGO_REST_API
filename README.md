@@ -342,11 +342,11 @@ Internal Error, we need to fix the csrf
 
 ## Solved
 
-`api_basics/views.py` import `from django.views.decorators.csrf import csrf_exempt` and add the instance `@csrf_exempt` above the `article_list` function
+`api_basics/views.py` import `python from django.views.decorators.csrf import csrf_exempt` and add the instance `@csrf_exempt` above the `article_list` function
 
 <b>NEW POST SUCCESSFUL</b> <br  />
 
-Now go back to `http://127.0.0.1:8000/article/`
+Now go back to http://127.0.0.1:8000/article/
 
 <b>Output</b>
 
