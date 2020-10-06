@@ -604,6 +604,24 @@ INSTALLED_APPS = [
 - This installed app needs to be migrated
   - `python3 manage.py migrate`
 - Go to http://127.0.0.1:8000/admin/ and insert superuser information
-- New Model called `Token` should now be installed <br  />
+- New Model called `Token` should now be installed <br  /> <br  />
   ![Tokens](https://i.imgur.com/xSOcY6K.png "Tokens")
-  <!-- ![rest_framework](https://i.imgur.com/opBOxq8.png "REST") -->
+- install TokenAuthentication from rest_framework.authentication
+- within GenericAPIViewm install ` authentication_classes = [TokenAuthentication]`
+
+```py
+from rest_framework.authentication import SessionAuthentication, TokenAuthentication, BasicAuthentication
+authentication_classes = [TokenAuthentication]
+permission_classes = [IsAuthenticated]
+```
+
+- go to http://127.0.0.1:8000/admin/ and create a new token
+
+### Check Via POSTMAN
+
+- Do a `GET`at http://localhost:8000/article/6/
+- Click on `Headers`
+- type `Authorization` in key and `Token <token>` in the header form
+  ![Tokens](https://i.imgur.com/hBUEV1z.png "Tokens Postman")
+  <br  /> <br  />
+  Congrats!
