@@ -606,3 +606,4 @@ INSTALLED_APPS = [
 - Go to http://127.0.0.1:8000/admin/ and insert superuser information
 - New Model called `Token` should now be installed <br  />
   ![Tokens](https://imgur.com/xSOcY6K "Tokens")
+  <!-- ![rest_framework](https://i.imgur.com/opBOxq8.png "REST") -->
