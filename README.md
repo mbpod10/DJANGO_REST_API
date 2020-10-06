@@ -529,22 +529,54 @@ Let's go back to `views.py` and make a query use SQL and make a change to the `G
     if request.method == 'GET':
         articles = Article.objects.all()
         serializer = ArticleSerializer(articles, many=True)
-        # return JsonResponse(serializer.data, safe=False)
-        return Response(serializer.data)
+       return Response(serializer.data)
 
     elif request.method == "POST":
-        # data = JSONParser().parse(request)
         serializer = ArticleSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    elif request.method == 'DELETE':
+   elif request.method == 'DELETE':
         articles = Article.objects.all()
         articles.delete()
-        return HttpResponse(status=204)
+        return Response(status=status.HTTP_204_NO_CONTENT)
   ```
 
-  New View: <br  />
+  New View: of http://127.0.0.1:8000/article/ <br  /> <br  />
   ![rest_framework](https://i.imgur.com/opBOxq8.png "REST")
+
+- You can now view and post from this new view
+  - In Postman, the `GET` route still comes in as regular JSON
+
+# Authentication
+
+https://www.django-rest-framework.org/api-guide/authentication/
+
+- Write the following lines within our class views
+
+```python
+authentication_classes = [SessionAuthentication, BasicAuthentication]
+permission_classes = [IsAuthenticated]
+```
+
+- Make sure you are logged out of admin. You can do this by going to http://127.0.0.1:8000/admin/ and clicking `LOGOUT`
+
+- Now try and go to a url route such as http://127.0.0.1:8000/article/6/ and you should get a messages such as
+
+```json
+{
+  "detail": "Authentication credentials were not provided."
+}
+```
+
+### Check Via Postman
+
+- Open Postman and try to get http://localhost:8000/article/6/
+- Click `Authorization`
+- In the `Type` dropdown, select `Basic Auth`
+- Enter your unique `Username` and `Password`
+- Click `Send`
+
+Authentication Successful!
