@@ -208,7 +208,7 @@ ArticleSerializer():
     date = DateTimeField()
 ```
 
-# Views
+# Views (GET and POST)
 
 In order to tell our server what we want to see, we need to create a method that shows all the articles in our API. It works like an index route. Both `POST` and `GET` are usually used through the same url endpoint. Think the following method as an index route for the Article model. <br  />
 
@@ -293,7 +293,7 @@ Go to http://127.0.0.1:8000/article/
 ]
 ```
 
-## Postman
+## GET and POST via Postman
 
 run a `GET` request from http://localhost:8000/article
 
@@ -380,4 +380,52 @@ Now go back to http://127.0.0.1:8000/article/
     "date": "2020-10-05T21:26:52.404102Z"
   }
 ]
+```
+
+## PUT, GET, DELETE By ID
+
+In order to make a `GET`, `PUT`, or, `DELETE` for a certain article, we need to do it by ID. We are going to make a method called `article_detail` within `api_basic/views.py` that utilized the id of the article to make those end point requests.
+
+- Import the new method into `api_basics/urls.py`
+
+```python
+from django.urls import path, include
+from .views import article_list, article_detail
+urlpatterns = [
+    path('article/', article_list),
+    path('detail/<int:pk>/', article_detail)
+]
+
+```
+
+our new url endpoint will end in an id corresponding to the id of article needed `<int:pk>` refers to the id. <br />
+
+Now, within `api_basic/urls` under the previously written method, add the following code. It is very similar to the previous method
+
+```python
+@csrf_exempt
+def article_detail(request, pk):
+    try:
+        article = Article.objects.get(pk=pk)
+
+    except Article.DoesNotExist:
+        return HttpResponse("Does not exist", status=404)
+
+    if request.method == 'GET':
+        serializer = ArticleSerializer(article)
+        return JsonResponse(serializer.data, status=201)
+
+    elif request.method == 'PUT':
+        data = JSONParser().parse(request)
+        serializer = ArticleSerializer(article, data=data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data, status=201)
+        return JsonResponse(serializer.errors, status=400)
+
+    elif request.method == 'DELETE':
+        article.delete()
+        return HttpResponse(status=204)
+
 ```
