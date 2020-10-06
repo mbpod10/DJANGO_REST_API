@@ -5,28 +5,29 @@ from .models import Article
 from .serializers import ArticleSerializer
 from django.views.decorators.csrf import csrf_exempt
 from django.core.exceptions import ObjectDoesNotExist
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
 # Create your views here.
 
 
-@csrf_exempt
+# @csrf_exempt
+@api_view(['GET', 'POST'])
 def article_list(request):
 
     if request.method == 'GET':
         articles = Article.objects.all()
         serializer = ArticleSerializer(articles, many=True)
-
-        for p in Article.objects.raw('SELECT id, author FROM api_basic_article'):
-            print(ArticleSerializer(p).data)
-
-        return JsonResponse(serializer.data, safe=False)
+        # return JsonResponse(serializer.data, safe=False)
+        return Response(serializer.data)
 
     elif request.method == "POST":
-        data = JSONParser().parse(request)
-        serializer = ArticleSerializer(data=data)
+        # data = JSONParser().parse(request)
+        serializer = ArticleSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return JsonResponse(serializer.data, status=201)
-        return JsonResponse(serializer.errors, status=400)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == 'DELETE':
         articles = Article.objects.all()

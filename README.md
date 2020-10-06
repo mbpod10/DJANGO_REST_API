@@ -494,7 +494,7 @@ Let's go back to `views.py` and make a query use SQL and make a change to the `G
 
 - raw()
   - allows you to make raw SQL queries in Django
-  - Django automattically creates the db name of the app in which the model resides along with the model name. In this case, the app name is `api_basic_article` and the model name is `article`
+  - Django automattically creates the db name of the app in which the model resides along with the model name. In this case, the app name is `api_basic_article` and the model name is `article` coming out to be `api_basic_article`
 
 ```python
  if request.method == 'GET':
@@ -515,3 +515,36 @@ Let's go back to `views.py` and make a query use SQL and make a change to the `G
 {'id': 3, 'title': 'Article Title3', 'author': 'Three', 'email': 'three@gmail.com', 'date': '2020-10-05T21:26:52.404102Z'}
 {'id': 4, 'title': 'anotherpost', 'author': 'Three', 'email': 'three@gmail.com', 'date': '2020-10-06T15:10:43.345110Z'}
 ```
+
+# Import API View
+
+- import `Response` from `rest_framework.response`
+
+  - make changes to index route to view it in API View
+
+  ```python
+  @api_view(['GET', 'POST'])
+  def article_list(request):
+
+    if request.method == 'GET':
+        articles = Article.objects.all()
+        serializer = ArticleSerializer(articles, many=True)
+        # return JsonResponse(serializer.data, safe=False)
+        return Response(serializer.data)
+
+    elif request.method == "POST":
+        # data = JSONParser().parse(request)
+        serializer = ArticleSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        articles = Article.objects.all()
+        articles.delete()
+        return HttpResponse(status=204)
+  ```
+
+  New View: <br  />
+  [(https://i.imgur.com/opBOxq8.png)]
