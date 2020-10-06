@@ -295,7 +295,7 @@ Go to http://127.0.0.1:8000/article/
 
 ## Postman
 
-run a `GET` request from `http://localhost:8000/article`
+run a `GET` request from http://localhost:8000/article
 
 <b>OUTPUT</b>
 
@@ -321,7 +321,7 @@ run a `GET` request from `http://localhost:8000/article`
 Nice, now lets run a post request via PostMan
 
 1. open postman to `POST`
-2. make sure the url post is `http://localhost:8000/article/`
+2. make sure the url post is http://localhost:8000/article/
 3. click `Body`
 4. click `Raw`
 5. on the right, Select `JSON` from the dropdown
@@ -342,7 +342,13 @@ Internal Error, we need to fix the csrf
 
 ## Solved
 
-`api_basics/views.py` import `python from django.views.decorators.csrf import csrf_exempt` and add the instance `@csrf_exempt` above the `article_list` function
+`api_basics/views.py` import
+
+```python
+from django.views.decorators.csrf import csrf_exempt
+```
+
+and add the instance `@csrf_exempt` above the `article_list` function
 
 <b>NEW POST SUCCESSFUL</b> <br  />
 
