@@ -547,4 +547,4 @@ Let's go back to `views.py` and make a query use SQL and make a change to the `G
   ```
 
   New View: <br  />
-  [(https://i.imgur.com/opBOxq8.png)]
+  ![rest_framework](https://i.imgur.com/opBOxq8.png "REST")
