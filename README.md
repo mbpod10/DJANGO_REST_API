@@ -474,3 +474,44 @@ urlpatterns = [
     path('title/<str:title>/', by_title)
 ]
 ```
+
+Now the url http://127.0.0.1:8000/title/anotherpost/ now yields: <br />
+Notice the endpoint `anotherpost`
+
+```json
+{
+  "id": 4,
+  "title": "anotherpost",
+  "author": "Three",
+  "email": "three@gmail.com",
+  "date": "2020-10-06T15:10:43.345110Z"
+}
+```
+
+# SQL Queries In URLS
+
+Let's go back to `views.py` and make a query use SQL and make a change to the `GET` route so we can print the objects into the console
+
+- raw()
+  - allows you to make raw SQL queries in Django
+  - Django automattically creates the db name of the app in which the model resides along with the model name. In this case, the app name is `api_basic_article` and the model name is `article`
+
+```python
+ if request.method == 'GET':
+        articles = Article.objects.all()
+        serializer = ArticleSerializer(articles, many=True)
+
+        for p in Article.objects.raw('SELECT * FROM api_basic_article'):
+            print(ArticleSerializer(p).data)
+
+        return JsonResponse(serializer.data, safe=False)
+
+```
+
+<b>RETURN</b>
+
+```
+{'id': 2, 'title': 'PUUUUUUUUUUUUTTTTTT', 'author': 'OUTUTUTUTUUUTTTTT', 'email': 'three@gmail.com', 'date': '2020-10-05T19:25:18.055948Z'}
+{'id': 3, 'title': 'Article Title3', 'author': 'Three', 'email': 'three@gmail.com', 'date': '2020-10-05T21:26:52.404102Z'}
+{'id': 4, 'title': 'anotherpost', 'author': 'Three', 'email': 'three@gmail.com', 'date': '2020-10-06T15:10:43.345110Z'}
+```
