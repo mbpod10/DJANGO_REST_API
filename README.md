@@ -604,5 +604,5 @@ INSTALLED_APPS = [
 - This installed app needs to be migrated
   - `python3 manage.py migrate`
 - Go to http://127.0.0.1:8000/admin/ and insert superuser information
-- New Model called `Token` should now be installed
-  !["Tokens"](https://imgur.com/xSOcY6K "Tokens")
+- New Model called `Token` should now be installed <br  />
+  ![Tokens](https://imgur.com/xSOcY6K "Tokens")
