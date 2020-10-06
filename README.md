@@ -52,7 +52,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    ############################
     'rest_framework',
     'api_basic'
 ]
@@ -147,8 +146,8 @@ class ArticleSerializer(serializers.Serializer):
 Out[11]: {'title': 'Second Title 2', 'author': 'Howdy', 'email': 'second2@gmail.com', 'date': '2020-10-05T19:25:18.055948Z'}
 ```
 
-11. content = JSONRenderer().render(serializer.data)
-12. content
+11. `content = JSONRenderer().render(serializer.data)`
+12. `content`
 
 <b>OUTPUT:</b>
 
@@ -158,8 +157,8 @@ Out[11]: {'title': 'Second Title 2', 'author': 'Howdy', 'email': 'second2@gmail.
 
 ```
 
-13. serializer = ArticleSerializer(Article.objects.all(), many=True)
-14. serializer.data
+13. `serializer = ArticleSerializer(Article.objects.all(), many=True)`
+14. `serializer.data`
 
 <b>OUTPUT:</b>
 
@@ -196,8 +195,8 @@ class ArticleSerializer(serializers.ModelSerializer):
 
 PYTHON SHELL
 
-1.  serializer = ArticleSerializer()
-2.  print(repr(serializer))
+1.  `serializer = ArticleSerializer()`
+2.  `print(repr(serializer))`
 
 <b>OUTPUT</b>
 
@@ -210,6 +209,8 @@ ArticleSerializer():
 ```
 
 # Views
+
+In order to tell our server what we want to see, we need to create a method that shows all the articles in our API. It works like an index route. Both `POST` and `GET` are usually used through the same url endpoint. Think the following method as an index route for the Article model. <br  />
 
 in `views.py`
 
@@ -243,6 +244,8 @@ def article_list(request):
 
 # Urls
 
+We want a seperate url path for articles so we need to add `path("", include('api_basic.urls'))` in the `url.py` in the project folder.
+
 Include `api_baiscs.urls` in `django_api_projects` urls
 
 ```python
@@ -256,7 +259,8 @@ urlpatterns = [
 
 ```
 
-create a new file called `urls.py` in `api_basic` and render the function that was created in `views.py`
+create a new file called `urls.py` in `api_basic` and render the function that was created in `views.py` <br  />
+These routes will be imported to the `project/urls.py`
 
 ```python
 from django.urls import path, include
@@ -340,4 +344,34 @@ Internal Error, we need to fix the csrf
 
 `api_basics/views.py` import `from django.views.decorators.csrf import csrf_exempt` and add the instance `@csrf_exempt` above the `article_list` function
 
-<b>NEW POST SUCCESSFUL</b>
+<b>NEW POST SUCCESSFUL</b> <br  />
+
+Now go back to `http://127.0.0.1:8000/article/`
+
+<b>Output</b>
+
+```json
+[
+  {
+    "id": 1,
+    "title": "Article Title",
+    "author": "Bar",
+    "email": "par@gmail.com",
+    "date": "2020-10-05T19:21:45.766033Z"
+  },
+  {
+    "id": 2,
+    "title": "Second Title 2",
+    "author": "Howdy",
+    "email": "second2@gmail.com",
+    "date": "2020-10-05T19:25:18.055948Z"
+  },
+  {
+    "id": 3,
+    "title": "Article Title3",
+    "author": "Three",
+    "email": "three@gmail.com",
+    "date": "2020-10-05T21:26:52.404102Z"
+  }
+]
+```
